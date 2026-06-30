@@ -1,3 +1,5 @@
+# Stored_Procs
+Repo of stored procs for use with dbt wizard migration
 # RetailDW Stored Procedures
 
 Database: **RetailDW** (SQL Server 2016+)
