@@ -1,0 +1,4 @@
+WarehouseId,WarehouseCode,WarehouseName,CountryCode,IsActive
+1,WH01,Primary DC - NJ,US,1
+2,WH02,UK DC - Reading,GB,1
+3,WH03,Returns Center - OH,US,0

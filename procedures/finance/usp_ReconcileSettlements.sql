@@ -8,8 +8,9 @@
 
    Marks the underlying Settlement rows RECONCILED / DISCREPANCY.
    ============================================================ */
-USE RetailDW;
-GO
+use retaildw
+;
+go
 CREATE OR ALTER PROCEDURE fin.usp_ReconcileSettlements
     @ReconDate DATE,
     @BatchId   UNIQUEIDENTIFIER = NULL
@@ -18,35 +19,58 @@ BEGIN
     SET NOCOUNT ON;
 
     DECLARE @plog BIGINT;
-    EXEC util.usp_LogStart @ProcName = 'fin.usp_ReconcileSettlements', @BatchId = @BatchId, @ProcLogId = @plog OUTPUT;
+exec util.usp_logstart @procname = 'fin.usp_ReconcileSettlements',
+@batchid = @batchid,
+@proclogid
+= @plog output
+;
 
-    BEGIN TRY
+begin try
         DECLARE @tolTxt VARCHAR(400);
-        EXEC util.usp_GetConfig @ParamKey = 'recon.tolerance', @Default = '0.01', @Value = @tolTxt OUTPUT;
+exec util.usp_getconfig @paramkey = 'recon.tolerance',
+@default = '0.01',
+@value
+= @toltxt output
+;
         DECLARE @tol DECIMAL(18,4) = ISNULL(TRY_CONVERT(DECIMAL(18,4), @tolTxt), 0.01);
 
-        DELETE FROM fin.Reconciliation WHERE ReconDate = @ReconDate;
+delete from fin.reconciliation
+where recondate = @recondate
+;
 
-        ;WITH expected AS (
-            SELECT PaymentMethod, SUM(Amount) AS Expected
-              FROM sales.Payment
-             WHERE CAST(ProcessedUtc AS DATE) = @ReconDate AND Status IN ('CAPTURED','REFUNDED')
-             GROUP BY PaymentMethod
-        ),
-        settled AS (
-            SELECT PaymentMethod, SUM(GrossAmount) AS Settled
-              FROM fin.Settlement WHERE SettlementDate = @ReconDate
-             GROUP BY PaymentMethod
-        )
-        INSERT INTO fin.Reconciliation (ReconDate, PaymentMethod, ExpectedAmount, SettledAmount, Variance, Status)
-        SELECT @ReconDate,
-               COALESCE(e.PaymentMethod, s.PaymentMethod),
-               ISNULL(e.Expected, 0),
-               ISNULL(s.Settled, 0),
-               ISNULL(s.Settled,0) - ISNULL(e.Expected,0),
-               CASE WHEN ABS(ISNULL(s.Settled,0) - ISNULL(e.Expected,0)) <= @tol THEN 'MATCHED' ELSE 'UNMATCHED' END
-          FROM expected e
-          FULL OUTER JOIN settled s ON s.PaymentMethod = e.PaymentMethod;
+;
+with
+    expected as (
+        select paymentmethod, sum(amount) as expected
+        from sales.payment
+        where
+            cast(processedutc as date) = @recondate
+            and status in ('CAPTURED', 'REFUNDED')
+        group by paymentmethod
+    ),
+    settled as (
+        select paymentmethod, sum(grossamount) as settled
+        from fin.settlement
+        where settlementdate = @recondate
+        group by paymentmethod
+    )
+    insert into fin.reconciliation(
+        recondate, paymentmethod, expectedamount, settledamount, variance, status
+    )
+select
+    @recondate,
+    coalesce(e.paymentmethod, s.paymentmethod),
+    isnull(e.expected, 0),
+    isnull(s.settled, 0),
+    isnull(s.settled, 0) - isnull(e.expected, 0),
+    case
+        when abs(isnull(s.settled, 0) - isnull(e.expected, 0)) <= @tol
+        then 'MATCHED'
+        else 'UNMATCHED'
+    end
+from expected e
+full outer join settled s on s.paymentmethod = e.paymentmethod
+;
 
         UPDATE fin.Settlement
            SET Status = CASE WHEN r.Status = 'MATCHED' THEN 'RECONCILED' ELSE 'DISCREPANCY' END
@@ -59,12 +83,22 @@ BEGIN
                CONCAT('Settlement mismatch ', PaymentMethod, ' var=', Variance)
           FROM fin.Reconciliation WHERE ReconDate = @ReconDate AND Status = 'UNMATCHED';
 
-        EXEC util.usp_LogEnd @ProcLogId = @plog;
-    END TRY
-    BEGIN CATCH
-        EXEC util.usp_LogError @ProcName = 'fin.usp_ReconcileSettlements', @BatchId = @BatchId;
-        EXEC util.usp_LogEnd @ProcLogId = @plog, @Status = 'FAILED';
-        THROW;
-    END CATCH
-END
-GO
+exec util.usp_logend @proclogid
+= @plog
+;
+end try
+begin catch
+exec util.usp_logerror @procname = 'fin.usp_ReconcileSettlements',
+@batchid
+= @batchid
+;
+exec util.usp_logend @proclogid
+= @plog,
+@status
+= 'FAILED'
+;
+throw
+;
+end catch
+end
+go

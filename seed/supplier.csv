@@ -1,0 +1,9 @@
+SupplierId,SupplierName,CountryCode,LeadTimeDays,IsActive
+1,Acme Distribution,US,7,1
+2,Northwind Traders,GB,14,1
+3,Globex Supply,DE,10,1
+4,Initech Wholesale,US,10,1
+5,Umbrella Goods,FR,7,1
+6,Soylent Foods,IE,7,1
+7,Stark Components,US,10,1
+8,Wayne Industrial,CA,21,0

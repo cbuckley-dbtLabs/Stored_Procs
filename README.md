@@ -18,6 +18,7 @@ monolith back in 2017, migrated piecemeal ever since.
 | Folder | Schema(s) | What lives here |
 |--------|-----------|-----------------|
 | `schema/`            | all        | DDL: schemas, tables, seed reference data |
+| `seed/`              | all        | CSV base data + `load_seed.sql` loader (see below) |
 | `procedures/util`    | `util`     | logging, error handling, config, batch control |
 | `procedures/customer`| `dbo`      | customer + loyalty maintenance |
 | `procedures/inventory`| `inv`     | stock levels, movements, purchase orders, reorder |
@@ -38,7 +39,35 @@ monolith back in 2017, migrated piecemeal ever since.
 
 Run `schema/` files in numeric order, then load `procedures/util` first
 (everything depends on `util.usp_LogStart` / `util.usp_LogEnd`), then the rest
-in any order.
+in any order. `deploy_all.sql` does all of this in one go (SQLCMD mode).
+
+## Seed data
+
+`seed/` holds CSV base data and a `seed/load_seed.sql` loader. It populates
+reference + master tables (currencies, countries, FX rates, GL accounts,
+config, warehouses, ~20 categories, 8 suppliers, 60 products, 3 price lists,
+~40 customers, addresses, loyalty accounts, stock levels, promotions) and drops
+the `seed/feeds/*.csv` raw files into the `stg.*` staging tables so the ETL /
+nightly batch has something to chew on.
+
+```
+seed/
+  *.csv              ← reference + master data (keyed with explicit ids)
+  feeds/*.csv        ← raw landing files (deliberately a bit dirty) for stg.*
+  load_seed.sql      ← BULK INSERT loader (SQLCMD: set :seeddir to a server path)
+```
+
+Heads up:
+- `load_seed.sql` is an **alternative** to the inline `schema/07_seed_reference.sql`
+  — run **one or the other**, not both, or they collide on primary keys.
+- It's a **first-load** script: assumes the target tables are empty (loads ids
+  verbatim under `IDENTITY_INSERT`).
+- `BULK INSERT` reads files from the **SQL Server box's** filesystem, not your
+  client. Point `:seeddir` at a path the service account can see (or use `bcp`).
+- The seed deliberately includes two duplicate customers (`C9001`, `C9002`) so
+  `dbo.proc_FixCustomerDupes` actually finds something, and the `feeds/` files
+  include bad rows (unknown SKU/customer, zero qty, non-numeric cost) to exercise
+  the ETL reject paths. These are intentional, not data-quality bugs to "fix".
 
 ## Known issues / TODO
 

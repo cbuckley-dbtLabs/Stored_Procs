@@ -1,0 +1,6 @@
+CustomerNo,FirstName,LastName,Email,Phone,Country
+C2001,Grace,Hopper,grace.hopper@example.com,+1-555-2001,United States
+C2002,Alan,Turing,alan.turing@example.com,+44-20-2002,United Kingdom
+C2003,Ada,Lovelace,,+44-20-2003,UK
+,Edsger,Dijkstra,ed.dijkstra@example.com,+31-20-2004,Netherlands
+C2005,Katherine,Johnson,k.johnson@example.com,,USA

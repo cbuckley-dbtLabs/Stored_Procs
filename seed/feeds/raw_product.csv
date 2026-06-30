@@ -1,0 +1,5 @@
+Sku,ProductName,CategoryName,SupplierName,UnitCost,ListPrice
+SKU-99-9001,Gadget Widget A,Electronics,Acme Distribution,12.50,29.99
+SKU-99-9002,Gadget Widget B,Electronics,Acme Distribution,18.00,39.99
+SKU-12-9003,Mystery Novel,Books,Northwind Traders,4.25,12.99
+SKU-99-9004,Bad Cost Item,Grocery,Soylent Foods,not-a-number,5.49

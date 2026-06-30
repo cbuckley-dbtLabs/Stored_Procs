@@ -1,0 +1,7 @@
+CountryCode,CountryName,Region,DefaultCurrency
+US,United States,NA,USD
+GB,United Kingdom,EU,GBP
+IE,Ireland,EU,EUR
+DE,Germany,EU,EUR
+FR,France,EU,EUR
+CA,Canada,NA,CAD

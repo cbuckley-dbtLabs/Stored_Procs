@@ -1,0 +1,11 @@
+ParamKey,ParamValue,ParamType,Description
+default.warehouse.code,WH01,string,default WH for new orders
+loyalty.points.per.currency.unit,1,decimal,points earned per 1.00 net
+reorder.default.point,10,int,fallback reorder point
+reorder.default.qty,50,int,fallback reorder qty
+stockcount.variance.alert,25,int,units variance before alert
+recon.tolerance,0.01,decimal,settlement match tolerance
+settlement.fee.CARD,0.029,decimal,card processor fee
+settlement.fee.PAYPAL,0.034,decimal,paypal fee
+settlement.fee.GIFTCARD,0,decimal,no fee
+settlement.fee.STORECREDIT,0,decimal,no fee

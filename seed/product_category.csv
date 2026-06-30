@@ -1,0 +1,21 @@
+CategoryId,CategoryName,ParentCategoryId,DefaultMarginPct
+1,Electronics,,0.342
+2,Computers,,0.158
+3,Mobile Phones,,0.233
+4,Home & Kitchen,,0.217
+5,Furniture,,0.371
+6,Garden & Outdoor,,0.353
+7,Toys & Games,,0.418
+8,Sports & Fitness,,0.176
+9,Beauty & Health,,0.277
+10,Grocery,,0.159
+11,Pet Supplies,,0.216
+12,Books,,0.302
+13,Music & Movies,,0.158
+14,Office Supplies,,0.21
+15,Automotive,,0.345
+16,Tools & DIY,,0.313
+17,Mens Clothing,,0.216
+18,Womens Clothing,,0.327
+19,Kids Clothing,,0.393
+20,Footwear,,0.152
