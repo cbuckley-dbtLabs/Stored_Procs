@@ -1,1 +1,0 @@
-{{ test_not_null(column_name="order_line_id", model=get_where_subquery(ref('fct_order_lines'))) }}

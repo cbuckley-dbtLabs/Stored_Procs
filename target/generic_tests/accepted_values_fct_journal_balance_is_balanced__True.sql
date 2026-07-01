@@ -1,1 +1,0 @@
-{{ test_accepted_values(column_name="is_balanced", model=get_where_subquery(ref('fct_journal_balance')), values=[true]) }}

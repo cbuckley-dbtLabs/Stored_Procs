@@ -1,1 +1,0 @@
-{{ test_unique(column_name="journal_line_key", model=get_where_subquery(ref('fct_sales_journal_lines'))) }}

@@ -1,1 +1,0 @@
-{{ test_unique(column_name="row_id", model=get_where_subquery(ref('int_raw_orders_validated'))) }}

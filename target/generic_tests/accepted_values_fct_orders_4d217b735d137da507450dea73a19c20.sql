@@ -1,1 +1,0 @@
-{{ test_accepted_values(column_name="status", model=get_where_subquery(ref('fct_orders')), values=["CONFIRMED","PAID","SHIPPED","COMPLETED","CANCELLED","NEW","ONHOLD"]) }}

@@ -1,1 +1,0 @@
-{{ test_accepted_values(column_name="segment", model=get_where_subquery(ref('rpt_customer_ltv')), values=["VIP","REGULAR","LAPSED","NEW"]) }}

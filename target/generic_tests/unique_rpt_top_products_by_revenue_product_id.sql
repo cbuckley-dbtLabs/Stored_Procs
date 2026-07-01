@@ -1,1 +1,0 @@
-{{ test_unique(column_name="product_id", model=get_where_subquery(ref('rpt_top_products_by_revenue'))) }}
