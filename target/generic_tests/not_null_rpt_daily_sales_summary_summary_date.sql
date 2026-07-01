@@ -1,0 +1,1 @@
+{{ test_not_null(column_name="summary_date", model=get_where_subquery(ref('rpt_daily_sales_summary'))) }}

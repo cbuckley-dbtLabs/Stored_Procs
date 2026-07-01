@@ -1,0 +1,3 @@
+select *
+from analytics.dbt_cbuckley_stored_proc.fct_journal_balance
+where not is_balanced

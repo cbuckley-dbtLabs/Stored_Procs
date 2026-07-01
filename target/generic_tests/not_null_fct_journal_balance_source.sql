@@ -1,0 +1,1 @@
+{{ test_not_null(column_name="source", model=get_where_subquery(ref('fct_journal_balance'))) }}
